@@ -70,6 +70,7 @@ private:
 
   uint16_t local_port;
   std::string local_url;
+  std::string randomizer;
   std::string remote_url;
   weak_ptr<DatabaseInstance> ddb_instance;
   std::string user_agent;

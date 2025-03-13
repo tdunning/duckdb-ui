@@ -19,4 +19,8 @@ uint32_t GetPollingInterval(const ClientContext &context) {
   return internal::GetSetting<uint32_t>(context,
                                         UI_POLLING_INTERVAL_SETTING_NAME);
 }
+
+std::string GetUrlRandomizer(const ClientContext &context) {
+  return internal::GetSetting<std::string>(context, UI_LOCAL_URL_RANDOMIZER);
+}
 } // namespace duckdb

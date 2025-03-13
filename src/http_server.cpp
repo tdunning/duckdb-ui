@@ -64,7 +64,8 @@ bool HttpServer::IsRunningOnMachine(ClientContext &context) {
   }
 
   const auto local_port = GetLocalPort(context);
-  auto local_url = StringUtil::Format("http://localhost:%d", local_port);
+  const auto randomizer = GetUrlRandomizer(context);
+  auto local_url = StringUtil::Format("http://localhost:%d%s", local_port, randomizer);
 
   httplib::Client client(local_url);
   return client.Get("/info");
@@ -94,19 +95,22 @@ const HttpServer &HttpServer::Start(ClientContext &context, bool *was_started) {
 
   const auto remote_url = GetRemoteUrl(context);
   const auto port = GetLocalPort(context);
+  const auto randomizer = GetUrlRandomizer(context);
   auto server = GetInstance(context);
-  server->DoStart(port, remote_url);
+  server->DoStart(port, randomizer, remote_url);
   return *server;
 }
 
 void HttpServer::DoStart(const uint16_t _local_port,
+			 const std::string &_randomizer,
                          const std::string &_remote_url) {
   if (Started()) {
     throw std::runtime_error("HttpServer already started");
   }
 
   local_port = _local_port;
-  local_url = StringUtil::Format("http://localhost:%d", local_port);
+  randomizer = _randomizer;
+  local_url = StringUtil::Format("http://localhost:%d%s", local_port, _randomizer);
   remote_url = _remote_url;
   user_agent =
       StringUtil::Format("duckdb-ui/%s-%s(%s)", DuckDB::LibraryVersion(),
@@ -149,7 +153,7 @@ void HttpServer::DoStop() {
 }
 
 std::string HttpServer::LocalUrl() const {
-  return StringUtil::Format("http://localhost:%d/", local_port);
+  return StringUtil::Format("http://localhost:%d%s/", local_port, randomizer);
 }
 
 shared_ptr<DatabaseInstance> HttpServer::LockDatabaseInstance() {
@@ -185,7 +189,11 @@ void HttpServer::Run() {
                   const httplib::ContentReader &content_reader) {
                 HandleTokenize(req, res, content_reader);
               });
-  server.listen("localhost", local_port);
+  if (randomizer == "") {
+    server.listen("localhost", local_port);
+  } else {
+    server.listen("0.0.0.0", local_port);
+  }
 }
 
 void HttpServer::HandleGetInfo(const httplib::Request &req,

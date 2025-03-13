@@ -5,6 +5,7 @@
 
 #define UI_LOCAL_PORT_SETTING_NAME "ui_local_port"
 #define UI_LOCAL_PORT_SETTING_DEFAULT 4213
+#define UI_LOCAL_URL_RANDOMIZER ""
 #define UI_REMOTE_URL_SETTING_NAME "ui_remote_url"
 #define UI_REMOTE_URL_SETTING_DEFAULT "https://ui.duckdb.org"
 #define UI_POLLING_INTERVAL_SETTING_NAME "ui_polling_interval"
@@ -28,5 +29,5 @@ T GetSetting(const ClientContext &context, const char *setting_name) {
 std::string GetRemoteUrl(const ClientContext &);
 uint16_t GetLocalPort(const ClientContext &);
 uint32_t GetPollingInterval(const ClientContext &);
-
+std::string GetUrlRandomizer(const ClientContext &);
 } // namespace duckdb

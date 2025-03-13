@@ -4,7 +4,8 @@ This repository is based on https://github.com/duckdb/extension-template, check 
 
 ---
 
-This extension, Ui, allow you to ... <extension_goal>.
+This extension, Ui, allows you to have a more advanced interface to
+your DuckDB instance. 
 
 
 ## Building

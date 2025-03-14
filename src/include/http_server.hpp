@@ -40,7 +40,7 @@ private:
   friend class Watcher;
 
   // Lifecycle
-  void DoStart(const uint16_t local_port, const std::string &remote_url);
+  void DoStart(const uint16_t local_port, const std::string &randomizer, const std::string &remote_url);
   void DoStop();
   void Run();
   void UpdateDatabaseInstance(shared_ptr<DatabaseInstance> context_db);
@@ -85,3 +85,4 @@ private:
 
 } // namespace ui
 } // namespace duckdb
+
